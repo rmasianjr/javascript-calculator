@@ -1,0 +1,32 @@
+.Button {
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0.5rem;
+  border-radius: 1rem;
+  font-size: 2rem;
+  border-bottom: 3px solid #777;
+  background-color: #383842;
+  color: #fff;
+  font-family: inherit;
+  box-shadow: 0 5px 4px rgba(0, 0, 0, 0.8);
+  outline: 0;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+.Button:active {
+  border-bottom: 3px solid transparent;
+  box-shadow: none;
+}
+
+#clear {
+  background-color: #a05b70;
+}
+
+#add {
+  flex: 1;
+}
+
+#zero {
+  flex: 1;
+}

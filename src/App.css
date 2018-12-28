@@ -1,32 +1,49 @@
 .App {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.calculator {
+  border: 5px solid #616469;
+  max-width: 31rem;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem 0.5rem 2rem 2rem;
+  margin: 5px auto;
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.7);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.screen {
+  height: 10rem;
+  border-width: 1rem 1.5rem 2rem 1.5rem;
+  border-color: #616469;
+  border-style: solid;
+  border-radius: 5%;
+  background-color: #cad8d8;
+  color: #333;
+  font-size: 1.8rem;
+  text-align: right;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  box-shadow: 0 2px 0px 1px #b3b3b3, 0 7px 4px rgba(0, 0, 0, 0.8);
 }
 
-.App-link {
-  color: #61dafb;
+.calculator-keys {
+  display: flex;
+  width: 27rem;
+  padding: 0.5rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.num-keys {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.operation-keys {
+  display: flex;
+  flex-direction: column;
 }
