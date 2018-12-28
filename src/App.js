@@ -30,8 +30,8 @@ class App extends Component {
                 <Button id="three">3</Button>
                 <Button id="two">2</Button>
                 <Button id="one">1</Button>
-                <Button id="zero">0</Button>
                 <Button id="decimal">.</Button>
+                <Button id="zero">0</Button>
               </div>
             </div>
             <div className="operation-keys">
