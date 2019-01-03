@@ -7,6 +7,7 @@ import ClearButton from './components/Button/ClearButton';
 import ToggleButton from './components/Button/ToggleButton';
 import DecimalButton from './components/Button/DecimalButton';
 import OperationButton from './components/Button/OperationButton';
+import EqualButton from './components/Button/EqualButton';
 
 class App extends Component {
   state = {
@@ -14,7 +15,8 @@ class App extends Component {
     history: '',
     prevValue: null,
     currentOperator: null,
-    toOperation: false
+    toOperation: false,
+    pressedEquals: false
   };
 
   handleClearAll = () => {
@@ -23,7 +25,8 @@ class App extends Component {
       history: '',
       currentOperator: null,
       toOperation: false,
-      prevValue: null
+      prevValue: null,
+      pressedEquals: false
     });
   };
 
@@ -36,27 +39,38 @@ class App extends Component {
   };
 
   handleInputDigit = digit => {
-    const { displayValue, toOperation } = this.state;
+    const { displayValue, toOperation, pressedEquals } = this.state;
 
     if (toOperation) {
       this.setState({
         displayValue: digit,
-        toOperation: false
+        toOperation: false,
+        pressedEquals: false
       });
     } else {
       this.setState({
-        displayValue: displayValue === '0' ? digit : displayValue + digit
+        displayValue:
+          displayValue === '0' || pressedEquals ? digit : displayValue + digit,
+        pressedEquals: false
       });
     }
   };
 
   handleInputDecimal = () => {
-    const { displayValue } = this.state;
+    const { displayValue, pressedEquals } = this.state;
 
     if (!displayValue.includes('.')) {
       this.setState({
         displayValue: displayValue + '.',
         toOperation: false
+      });
+    }
+
+    if (pressedEquals) {
+      this.setState({
+        displayValue: '0.',
+        pressedEquals: false,
+        prevValue: null
       });
     }
   };
@@ -82,7 +96,8 @@ class App extends Component {
       displayValue,
       currentOperator,
       history,
-      toOperation
+      toOperation,
+      pressedEquals
     } = this.state;
     const currentValue = parseFloat(displayValue);
 
@@ -95,10 +110,15 @@ class App extends Component {
       this.setState({
         currentOperator: nextOperator,
         toOperation: true,
-        history: `${history} ${displayValue} ${nextOperator}`
+        history: `${history} ${displayValue} ${nextOperator}`,
+        pressedEquals: false
       });
 
       if (prevValue === null) {
+        this.setState({
+          prevValue: currentValue
+        });
+      } else if (pressedEquals) {
         this.setState({
           prevValue: currentValue
         });
@@ -113,6 +133,35 @@ class App extends Component {
           displayValue: String(newValue)
         });
       }
+    }
+  };
+
+  handleEquals = () => {
+    const {
+      prevValue,
+      displayValue,
+      currentOperator,
+      pressedEquals
+    } = this.state;
+
+    if (!currentOperator || pressedEquals) {
+      this.setState({
+        pressedEquals: true,
+        toOperation: false
+      });
+    } else {
+      const newValue = this.calculate(
+        prevValue,
+        parseFloat(displayValue),
+        currentOperator
+      );
+      this.setState({
+        pressedEquals: true,
+        history: '',
+        prevValue: newValue,
+        displayValue: String(newValue),
+        toOperation: false
+      });
     }
   };
 
@@ -188,9 +237,9 @@ class App extends Component {
               <OperationButton id="add" onOperation={this.handleOperation}>
                 +
               </OperationButton>
-              <OperationButton id="equals" onEquals={this.handleOperation}>
+              <EqualButton id="equals" onEquals={this.handleEquals}>
                 =
-              </OperationButton>
+              </EqualButton>
             </div>
           </div>
         </div>

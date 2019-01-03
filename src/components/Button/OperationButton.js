@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Button.css';
 
-const OperationButton = ({ children, onOperation }) => (
-  <button className="Button" onClick={() => onOperation(children)}>
+const OperationButton = ({ children, onOperation, id }) => (
+  <button id={id} className="Button" onClick={() => onOperation(children)}>
     {children}
   </button>
 );
