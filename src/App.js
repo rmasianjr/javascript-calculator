@@ -57,20 +57,22 @@ class App extends Component {
   };
 
   handleInputDecimal = () => {
-    const { displayValue, pressedEquals } = this.state;
-
-    if (!displayValue.includes('.')) {
-      this.setState({
-        displayValue: displayValue + '.',
-        toOperation: false
-      });
-    }
+    const { displayValue, pressedEquals, toOperation } = this.state;
 
     if (pressedEquals) {
       this.setState({
         displayValue: '0.',
         pressedEquals: false,
         prevValue: null
+      });
+    } else if (toOperation) {
+      this.setState({
+        displayValue: '0.',
+        toOperation: false
+      });
+    } else if (!displayValue.includes('.')) {
+      this.setState({
+        displayValue: displayValue + '.'
       });
     }
   };
@@ -107,10 +109,15 @@ class App extends Component {
         history: history.replace(/.$/, nextOperator)
       });
     } else {
+      const endsWithDot = /\.$/.test(displayValue);
+      const newDisplayValue = endsWithDot
+        ? displayValue.replace(/\./, '')
+        : displayValue;
+
       this.setState({
         currentOperator: nextOperator,
         toOperation: true,
-        history: `${history} ${displayValue} ${nextOperator}`,
+        history: `${history} ${newDisplayValue} ${nextOperator}`,
         pressedEquals: false
       });
 
