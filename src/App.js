@@ -6,17 +6,24 @@ import Button from './components/Button/Button';
 import ClearButton from './components/Button/ClearButton';
 import ToggleButton from './components/Button/ToggleButton';
 import DecimalButton from './components/Button/DecimalButton';
+import OperationButton from './components/Button/OperationButton';
 
 class App extends Component {
   state = {
     displayValue: '0',
-    history: ''
+    history: '',
+    prevValue: null,
+    currentOperator: null,
+    toOperation: false
   };
 
   handleClearAll = () => {
     this.setState({
       displayValue: '0',
-      history: ''
+      history: '',
+      currentOperator: null,
+      toOperation: false,
+      prevValue: null
     });
   };
 
@@ -29,18 +36,83 @@ class App extends Component {
   };
 
   handleInputDigit = digit => {
-    const { displayValue } = this.state;
+    const { displayValue, toOperation } = this.state;
 
-    this.setState({
-      displayValue: displayValue === '0' ? digit : displayValue + digit
-    });
+    if (toOperation) {
+      this.setState({
+        displayValue: digit,
+        toOperation: false
+      });
+    } else {
+      this.setState({
+        displayValue: displayValue === '0' ? digit : displayValue + digit
+      });
+    }
   };
 
   handleInputDecimal = () => {
     const { displayValue } = this.state;
 
     if (!displayValue.includes('.')) {
-      this.setState({ displayValue: displayValue + '.' });
+      this.setState({
+        displayValue: displayValue + '.',
+        toOperation: false
+      });
+    }
+  };
+
+  calculate(prevValue, currentValue, operation) {
+    switch (operation) {
+      case '÷':
+        return prevValue / currentValue;
+      case '×':
+        return prevValue * currentValue;
+      case '-':
+        return prevValue - currentValue;
+      case '+':
+        return prevValue + currentValue;
+      default:
+        return 0;
+    }
+  }
+
+  handleOperation = nextOperator => {
+    const {
+      prevValue,
+      displayValue,
+      currentOperator,
+      history,
+      toOperation
+    } = this.state;
+    const currentValue = parseFloat(displayValue);
+
+    if (toOperation) {
+      this.setState({
+        currentOperator: nextOperator,
+        history: history.replace(/.$/, nextOperator)
+      });
+    } else {
+      this.setState({
+        currentOperator: nextOperator,
+        toOperation: true,
+        history: `${history} ${displayValue} ${nextOperator}`
+      });
+
+      if (prevValue === null) {
+        this.setState({
+          prevValue: currentValue
+        });
+      } else if (currentOperator) {
+        const newValue = this.calculate(
+          prevValue,
+          currentValue,
+          currentOperator
+        );
+        this.setState({
+          prevValue: newValue,
+          displayValue: String(newValue)
+        });
+      }
     }
   };
 
@@ -63,7 +135,9 @@ class App extends Component {
                 <ToggleButton onToggleSign={this.handleToggleSign}>
                   ±
                 </ToggleButton>
-                <Button id="divide">÷</Button>
+                <OperationButton id="divide" onOperation={this.handleOperation}>
+                  ÷
+                </OperationButton>
               </div>
               <div className="num-keys">
                 <Button id="nine" onInputDigit={this.handleInputDigit}>
@@ -105,10 +179,18 @@ class App extends Component {
               </div>
             </div>
             <div className="operation-keys">
-              <Button id="multiply">×</Button>
-              <Button id="subtract">-</Button>
-              <Button id="add">+</Button>
-              <Button id="equals">=</Button>
+              <OperationButton id="multiply" onOperation={this.handleOperation}>
+                ×
+              </OperationButton>
+              <OperationButton id="subtract" onOperation={this.handleOperation}>
+                -
+              </OperationButton>
+              <OperationButton id="add" onOperation={this.handleOperation}>
+                +
+              </OperationButton>
+              <OperationButton id="equals" onEquals={this.handleOperation}>
+                =
+              </OperationButton>
             </div>
           </div>
         </div>
