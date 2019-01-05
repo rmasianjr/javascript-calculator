@@ -130,11 +130,9 @@ class App extends Component {
           prevValue: currentValue
         });
       } else if (currentOperator) {
-        const newValue = this.calculate(
-          prevValue,
-          currentValue,
-          currentOperator
-        );
+        const answer = this.calculate(prevValue, currentValue, currentOperator);
+        const newValue = Math.round(answer * 10000000000) / 10000000000;
+
         this.setState({
           prevValue: newValue,
           displayValue: String(newValue)
@@ -157,11 +155,13 @@ class App extends Component {
         toOperation: false
       });
     } else {
-      const newValue = this.calculate(
+      const answer = this.calculate(
         prevValue,
         parseFloat(displayValue),
         currentOperator
       );
+      const newValue = Math.round(answer * 10000000000) / 10000000000;
+
       this.setState({
         pressedEquals: true,
         history: '',
