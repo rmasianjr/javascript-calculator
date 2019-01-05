@@ -250,6 +250,30 @@ class App extends Component {
             </div>
           </div>
         </div>
+        <footer className="footer">
+          <span>
+            Created by:{' '}
+            <a
+              className="footer-link"
+              href="https://twitter.com/rmasianjr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ricardo Masian Jr.
+            </a>
+          </span>
+          <span> | </span>
+          <span>
+            <a
+              className="footer-link"
+              href="https://github.com/rmasianjr/javascript-calculator"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View source code
+            </a>
+          </span>
+        </footer>
       </div>
     );
   }
